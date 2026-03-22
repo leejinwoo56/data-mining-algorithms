@@ -4,15 +4,14 @@ from time import time
 
 
 def normalize_keep_alpha_space(s: str) -> str:
-    """?�꺖�눧紐꾩쁽?�넅 + ?釉�?�솁甕곕뀪�궢 ��⑤벉媛싷쭕? ?���筌�?"""
     return re.sub(r'[^a-z ]', '', s.lower())
 
 def shingles_k3(s: str) -> set[str]:
-    """3-shingle set ?源�?苑�"""
+    
     return {s[i:i+3] for i in range(len(s)-2)} if len(s) >= 3 else set()
 
 def next_prime_ge(n: int) -> int:
-    """n ?�뵠?湲�?�뵥 筌�? 甕곕뜆�럮 ?�꺖?�땾 獄쏆꼹�넎"""
+  
     def is_prime(x):
         if x < 2: return False
         if x % 2 == 0: return x == 2
@@ -34,7 +33,7 @@ def main():
     path = sys.argv[1]
     start = time()
 
-    np.random.seed(0)   #?�삏?�쑁 ?�뻻?諭� ��⑥쥙�젟
+    np.random.seed(0)  
 
     doc_ids = []
     doc_shingles = []
@@ -43,7 +42,7 @@ def main():
         for line in f:
             line = line.strip()
             if not line: continue
-            toks = line.split(None, 1)  # space 疫꿸퀣??
+            toks = line.split(None, 1)  
             if len(toks) == 1:
                 doc_id, text = toks[0], ""
             else:
@@ -69,14 +68,13 @@ def main():
     B = np.random.randint(0, c, size=K)
     D = len(doc_ids)
     signatures = np.full((D, K), fill_value=np.inf)
-    #?�뵠嚥≪쥙�읅?�몵嚥�? D揶�? ?肉�?�뵠���? token?�뵠 ?六�?�뵠 筌띿쉸??筌�? ?�쐭 ?�뒞?�몛?�읅?�몵嚥�? ��④쑴沅�?釉�疫�? ?�맄?鍮� D�몴? ?六�?�몵嚥�? ?沅�?�뒠 
-    #D�몴? ?六�?�몵嚥�? ?沅�?�뒠?釉�筌�? [token1, token2]�몴? ?�꽰?鍮� 揶�? �눧紐꾧퐣?�벥 signature ��④쑴沅� 揶�??�뮟
+    
     for d, shingles in enumerate(doc_shingles):
-        #d?�뮉 �눧紐꾧퐣 甕곕뜇�깈 
+      
         idxs = [shingle_to_idx[s] for s in shingles if s in shingle_to_idx]
         for k in range(K):
-            hvals = (A[k] * np.array(idxs) + B[k]) % c #idx array 筌�?, shingle?�뵠 鈺곕똻�삺?釉�?�뮉 array?諭�?肉� ��⑤벊�뻼 ?�읅?�뒠
-            signatures[d, k] = np.min(hvals) if len(hvals) > 0 else np.inf # 域밸챷夷� 筌ㅼ뮇�꽄揶쏅�れ뵠 signature揶�? ?留�
+            hvals = (A[k] * np.array(idxs) + B[k]) % c 
+            signatures[d, k] = np.min(hvals) if len(hvals) > 0 else np.inf
 
     bands = []
     for band in range(b):
